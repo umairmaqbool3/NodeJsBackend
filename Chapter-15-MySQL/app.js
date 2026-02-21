@@ -11,14 +11,6 @@ const rootDir = require("./utils/pathUtil");
 const errorsController = require("./controllers/errors");
 const db = require("./utils/database");
 
-db.execute("SELECT * FROM homes")
-  .then(([rows, fields]) => {
-    console.log("Getting from db : ", rows);
-  })
-  .catch((err) => {
-    console.log("Error connecting db : ", err);
-  });
-
 const app = express();
 
 app.set('view engine', 'ejs');
