@@ -2,7 +2,7 @@ const mongo = require('mongodb');
 
 const MongoClient = mongo.MongoClient;
 
-const MONGO_URL = "mongodb+srv://root:root@backendlearning.zylpsvj.mongodb.net/?appName=BackendLearning";
+const MONGO_URL = "";
 
 let _db;
 
