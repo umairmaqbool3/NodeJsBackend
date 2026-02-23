@@ -1,5 +1,5 @@
 
-const {getDb} = require("../utils/database");
+const {getDB} = require("../utils/database");
 
 module.exports = class Home {
   constructor(houseName, price, location, rating, imageUrl,description, id) {
@@ -13,10 +13,8 @@ module.exports = class Home {
   }
 
   save() {
-   const db = getDb();
-   console.log("Saving home to database:", db);
+   const db = getDB();
    return db.collection("homes").insertOne(this);
-  // console.log("Saving home to database:", this);
   }
 
   static fetchAll() {

@@ -11,6 +11,7 @@ const mongoConnect = (callback) => {
   .then(client => {
     callback();
     _db = client.db('airbnb');
+    callback();
   }).catch(err => {
     console.log('Error while connecting to Mongo: ', err);
   });
