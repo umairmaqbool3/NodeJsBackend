@@ -18,7 +18,8 @@ module.exports = class Home {
   }
 
   static fetchAll() {
-   return db.execute("SELECT * FROM homes");
+    const db = getDB();
+   return db.collection('homes').find().toArray();
   }
 
   static findById(homeId) {

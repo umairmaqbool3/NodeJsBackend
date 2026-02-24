@@ -2,7 +2,7 @@ const mongo = require('mongodb');
 
 const MongoClient = mongo.MongoClient;
 
-const MONGO_URL = "";
+const MONGO_URL = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 
 let _db;
 
