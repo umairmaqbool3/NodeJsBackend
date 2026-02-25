@@ -12,8 +12,7 @@ exports.getEditHome = (req, res, next) => {
   const homeId = req.params.homeId;
   const editing = req.query.editing === 'true';
 
-  Home.findById(homeId).then(([homes]) => {
-    const home = homes[0];
+  Home.findById(homeId).then(home => {
     if (!home) {
       console.log("Home not found for editing.");
       return res.redirect("/host/host-home-list");
@@ -52,7 +51,9 @@ exports.postAddHome = (req, res, next) => {
 exports.postEditHome = (req, res, next) => {
   const { id, houseName, price, location, rating, imageUrl, description } = req.body;
   const home = new Home(houseName, price, location, rating, imageUrl, description, id);
-  home.save(false);
+  home.save().then(() => {
+    console.log("Home updated successfully.");
+  });
   res.redirect("/host/host-home-list");
 };
 
