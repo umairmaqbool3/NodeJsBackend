@@ -1,17 +1,28 @@
-// Core Modules
-
+const { ObjectId } = require('mongodb');
+const {getDB} = require('../utils/database');
 
 module.exports = class Favourite {
-
-  static addToFavourite(homeId, callback) {
-    
+  constructor(homeId) {
+    this.homeId = homeId;
   }
 
-  static getFavourites(callback) {
-    
+  async save() {
+    const db = getDB();
+  
+    return db.collection('favourites').updateOne(
+      { homeId: this.homeId },     // filter (uniqueness condition)
+      { $setOnInsert: this },      // only set if inserting
+      { upsert: true }             // insert if not exists
+    );
   }
 
-  static deleteById(delHomeId, callback) {
-    
+  static getFavourites() {
+    const db = getDB();
+    return db.collection('favourites').find().toArray();
+  }
+
+  static deleteById(delHomeId) {
+    const db = getDB();
+    return db.collection('favourites').deleteOne({homeId: delHomeId});
   }
 };
