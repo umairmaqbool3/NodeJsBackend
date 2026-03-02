@@ -4,6 +4,8 @@ const path = require('path');
 
 // External Module
 const express = require('express');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 //Local Module
 const storeRouter = require("./routes/storeRouter")
@@ -18,12 +20,25 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
+const store = new MongoDBStore({
+  uri: process.env.MONGODB_URI,
+  collection: 'sessions'
+});
+
 app.use(express.urlencoded());
+app.use(session({
+  secret: 'my secret key',
+  resave: false,
+  saveUninitialized: true,
+  store: store
+}));
 app.use((req, res, next) => {
   //Logic 1
-  req.isLoggedIn = req.get("Cookie") && req.get("Cookie").includes("isLoggedIn=true");
+  // req.isLoggedIn = req.get("Cookie") && req.get("Cookie").includes("isLoggedIn=true");
   //Logic 2
   // req.isLoggedIn = req.get('Cookie') ? req.get('Cookie').split('=')[1] === 'true' : false;
+  //Now read from session
+  req.isLoggedIn = req.session.isLoggedIn;
   next();
 });
 app.use(authRouter);
