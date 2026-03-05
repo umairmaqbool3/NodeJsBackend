@@ -1,11 +1,16 @@
-const mongoose = require('mongoose');
 
-const userSchema = mongoose.Schema({
+const mongoose = require('mongoose');
+const favourite = require('./favourite');
+
+const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: [true, 'First name is required']
   },
-  lastName: String,
+  lastName: {
+    type: String,
+    required: true
+  },
   email: {
     type: String,
     required: [true, 'Email is required'],
@@ -13,17 +18,17 @@ const userSchema = mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Password is required']
+    required: [true, 'Password is required'],
   },
   userType: {
     type: String,
     enum: ['guest', 'host'],
     default: 'guest'
   },
-  favourites: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Home'
-  }]
 });
 
+
+ 
 module.exports = mongoose.model('User', userSchema);
+
+
