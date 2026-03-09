@@ -7,10 +7,11 @@ const todoSchema = new mongoose.Schema({
     },
     date: Date,
     completed: {
-        type: String,
+        type: Boolean,
         default: false
     },
-    timestamps: true
-})
+},
+{timestamps: true}
+);
 
 module.exports = mongoose.model('TodoItem', todoSchema);

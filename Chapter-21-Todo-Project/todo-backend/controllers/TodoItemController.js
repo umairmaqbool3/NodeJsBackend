@@ -1,15 +1,31 @@
-exports.createTodoItem = (req, res) => {
-    const { title, description } = req.body;
+const TodoItem = require('../models/TodoItem');
 
-    // Here you would typically save the todo item to a database
-    // For this example, we'll just return the created item
+exports.createTodoItem = async (req, res) => {
+    const { task, date } = req.body;
 
-    const newTodoItem = {
-        id: Date.now(), // Just a simple unique ID for demonstration
-        title,
-        description,
-        completed: false
-    };
+    const todoItem = new TodoItem({task, date});
+    await todoItem.save();
+    res.status(201).json(todoItem);
+};
 
-    res.status(201).json(newTodoItem);
+exports.getTodoItems = async (req, res) => {
+    const todoItems = await TodoItem.find();
+    res.json(todoItems);
+};
+
+exports.deleteTodoItem = async (req, res) => {
+    const { id } = req.params;
+    await TodoItem.findByIdAndDelete(id);
+    res.status(204).json({_id: id});    
+};
+
+exports.markCompleted = async (req, res) => {
+    const { id } = req.params;
+    const todoItem = await TodoItem.findById(id);
+    if (!todoItem) {
+        return res.status(404).json({ message: 'Todo item not found' });
+    }
+    todoItem.completed = true;
+    await todoItem.save();
+    res.json(todoItem);
 };
