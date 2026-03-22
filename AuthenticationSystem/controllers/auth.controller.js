@@ -1,7 +1,9 @@
 import userModel from "../models/user.model.js";
 import crypto from "crypto";
+import jwt from "jsonwebtoken";
+import config from "../config/config.js";
 
-async function register(req,res){
+exports.register = async (req,res) =>{
     const {username, email, password} = req.body;
     const isAlreadyRegistered = await userModel.findOne({
         $or:[
@@ -21,5 +23,20 @@ async function register(req,res){
         username,
         email,
         password: hasdedPassword
+    })
+
+    const token = jwt.sign({
+        id: user._id
+    },config.JWT_SECRET,{
+        expiresIn: "1d"
+    })
+
+    res.status(201).json({
+        message:"User registered Successfully",
+        user:{
+            username: user.username,
+            email: user.email
+        },
+        token
     })
 }
