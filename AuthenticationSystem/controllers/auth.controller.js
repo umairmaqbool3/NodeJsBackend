@@ -3,7 +3,7 @@ import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 
-exports.register = async (req,res) =>{
+export async function register(req,res){
     const {username, email, password} = req.body;
     const isAlreadyRegistered = await userModel.findOne({
         $or:[
@@ -39,4 +39,28 @@ exports.register = async (req,res) =>{
         },
         token
     })
+}
+
+export async function getMe(req,res){
+    const token = req.headers.authorization?.split(" ")[1];
+    console.log("req : ", req.headers.authorization)
+    console.log("token : ", token)
+
+    if(!token){
+        return res.status(401).json({
+            message:"Token not found"
+        })
+    }
+
+    const decoded = jwt.verify(token, config.JWT_SECRET);
+    const user =await userModel.findById(decoded.id);
+
+    res.status(200).json({
+        message:"User fetched successfully",
+        user:{
+            username: user.username,
+            email: user.email
+        }
+    })
+
 }
